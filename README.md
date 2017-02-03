@@ -39,3 +39,5 @@ Once the dependencies are present in the local repository, you can perform actua
 ```
 
 Resulting plugin is located in "ali-plugin-main/target/ali-idea-plugin.zip".
+
+test
