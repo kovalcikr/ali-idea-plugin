@@ -23,6 +23,8 @@ import com.hp.alm.ali.rest.client.filter.IdentityFilter;
 import com.hp.alm.ali.rest.client.filter.IssueTicketFilter;
 import com.hp.alm.ali.rest.client.filter.ResponseFilter;
 import com.hp.alm.ali.utils.XmlUtils;
+import com.intellij.openapi.diagnostic.Logger;
+
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -70,6 +72,8 @@ import static com.hp.alm.ali.utils.PathUtils.pathJoin;
  * </pre>
  */
 public class AliRestClient implements RestClient {
+
+    private static final Logger LOGGER = Logger.getInstance(AliRestClient.class);
 
     private static final LocationBasedBuilder<PostMethod> POST_BUILDER = new LocationBasedBuilder<PostMethod>() {
         @Override
@@ -533,10 +537,12 @@ public class AliRestClient implements RestClient {
             synchronized (this) {
                 hasQcSession = hasQcSessionCookie();
                 if(!hasQcSession) {
+                    LOGGER.info(prettyPrintMethod(method));
                     status = httpClient.executeMethod(method);
                 }
             }
             if(hasQcSession) {
+                LOGGER.info(prettyPrintMethod(method));
                 status = httpClient.executeMethod(method);
             }
             writeResponse(resultInfo, method, !doNotWriteForStatuses.contains(status));
@@ -546,6 +552,14 @@ public class AliRestClient implements RestClient {
         } finally {
             method.releaseConnection();
         }
+    }
+
+    private String prettyPrintMethod(HttpMethod method) {
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append(method.getName()).append(" ").append(method.getPath()).append("\n")
+                .append("\n");
+        return sb.toString();
     }
 
     private boolean hasQcSessionCookie() {
