@@ -40,6 +40,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>util</artifactId>
+            <version>IC-141.3058.30</version>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>9.0.5.v20130815</version>
